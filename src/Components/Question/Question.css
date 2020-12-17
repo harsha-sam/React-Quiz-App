@@ -1,0 +1,13 @@
+.btn{
+    background-color: #fff;
+    border: none;
+}
+.btn:hover{
+    cursor: pointer;
+    background-color: #1a1a1a;
+    color: #fff;
+}
+.selected{
+    color: #fff;
+    background-color: #1a1a1a;
+}
