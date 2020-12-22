@@ -17,10 +17,6 @@ const Quiz = () => {
         setAnswers({ ...answers, [qId]: opId })
     };
 
-    const handleClearSelection = (qId) => {
-        setAnswers({ ...answers, [qId]: null })
-    };
-
     const qSelect = (id) => setIndex(id);
 
     return (
@@ -42,7 +38,7 @@ const Quiz = () => {
             </button>
             <button type="button"
                 className="next-btn"
-                onClick={() => handleClearSelection(questionnaire[index].id)}>
+                onClick={() => handleOptionSelect(questionnaire[index].id, null)}>
                 Clear Selection
             </button>
             <Navigation totalQuestions={questionnaire.length} qSelect={qSelect} />
