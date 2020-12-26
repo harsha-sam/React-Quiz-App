@@ -1,5 +1,6 @@
 import React from 'react';
 import './Navigation.css';
+import { AiFillClockCircle } from 'react-icons/ai';
 
 const Navigation = ({ qSelect, totalQuestions }) => {
     const boxes = [];
@@ -12,16 +13,21 @@ const Navigation = ({ qSelect, totalQuestions }) => {
         {i}
         </button>)
     }
-    return <div className="box">
-        { boxes }
-        <div>
-            <div className="legend bg-success"></div> Attempted
+    return <section>
+        <div className="box mb-4">
+            <AiFillClockCircle/> 30:00
+        </div>
+        <div className="box mb-4">
+            { boxes }
+            <br />
+            <div className="legend bg-info"></div> Attempted
             <br />
             <div className="legend bg-danger"></div> Flagged
             <br />
             <div className="legend bg-white"></div> Not Attempted
             <br /> 
         </div>
-    </div>;
+        <button className="btn btn-success btn-block mt-4">Submit</button>
+    </section>;
 }
 export default Navigation;

@@ -20,8 +20,9 @@ const Quiz = () => {
     return (
         <section>
             <Row>
-                <Col xs="10">
+                <Col xs="9">
                     <Question
+                        className="mb-3"
                         question={questionnaire[index]}
                         handleOptionSelect={handleOptionSelect}
                         answer={answers[questionnaire[index].id]}
@@ -49,7 +50,7 @@ const Quiz = () => {
                         </button>
                     </span>
                 </Col>
-                <Col xs="2">
+                <Col xs="3">
                     <Navigation totalQuestions={questionnaire.length} qSelect={qSelect} />
                 </Col>
             </Row>
