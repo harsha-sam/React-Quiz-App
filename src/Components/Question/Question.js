@@ -5,8 +5,8 @@ const Question = ({ question, answer, handleOptionSelect }) => {
     const { id, text, options } = question;
 
     return (
-        <div>
-            <h4>{text}</h4>
+        <div className="box">
+            <h4 className="mb-4">{`${id}. ${text}`}</h4>
             {
                 Object.keys(options).map((opId) => {
                     return <div key={String(id) + String(opId)}>

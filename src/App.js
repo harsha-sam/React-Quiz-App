@@ -1,11 +1,12 @@
 import Quiz from "./Components/Quiz/Quiz";
+import { Container } from 'reactstrap';
 import './App.css';
 
 function App() {
     return (
-        <div className="App">
+        <Container>
             <Quiz />
-        </div>
+        </Container>
     );
 }
 
