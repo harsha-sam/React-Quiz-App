@@ -14,7 +14,7 @@ const Navigation = ({ qSelect, totalQuestions }) => {
         </button>)
     }
     return <section>
-        <div className="box mb-4">
+        <div className="box mb-3 mt-4">
             <AiFillClockCircle/> 30:00
         </div>
         <div className="box mb-4">
