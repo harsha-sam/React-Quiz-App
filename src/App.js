@@ -1,6 +1,6 @@
 import { Container } from 'reactstrap';
-import Quiz from "./Components/Quiz/Quiz";
-import CreateTest from "./Components/CreateTest/CreateTest";
+import Quiz from "./Components/Quiz/Quiz.jsx";
+import CreateTest from "./Components/CreateTest/CreateTest.jsx";
 import './App.css';
 
 function App() {

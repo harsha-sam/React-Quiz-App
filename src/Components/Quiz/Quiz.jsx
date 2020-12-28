@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import Question from "../Question/Question";
-import Navigation from "../Navigation/Navigation";
+import Question from "../Question/Question.jsx";
+import Navigation from "../Navigation/Navigation.jsx";
 import questionnaire from "../../questionnaire";
 import { Row, Col } from "reactstrap";
 import "./Quiz.css";
