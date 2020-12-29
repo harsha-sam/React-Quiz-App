@@ -4,8 +4,8 @@ import { AiFillPlusCircle } from 'react-icons/ai';
 const defaultState = {
     testName: "",
     subject: "",
-    questions: [],
-    options: []
+    questions: [""],
+    options: [["", ""]]
 }
 
 const reducer = (state, action) => {
@@ -25,29 +25,32 @@ const reducer = (state, action) => {
     else if (action.type === "SET_QUESTION") {
         return {
             ...state,
-            questions: [...state.questions, action.payLoad],
-            options: [...state.options, []]
+            questions: [...state.questions, action.payLoad.text],
+            options: [...state.options, ["", ""]]
         }
     }
     else if (action.type === "SET_OPTION") {
+        const { qNo, text } = action.payLoad
         const newArray = [...state.options]
-        newArray[action.qId] = [...newArray[action.qId], action.payLoad]
+        newArray[qNo] = [...newArray[qNo], text]
         return {
             ...state,
             options: newArray
         }
     }
     else if (action.type === "UPDATE_QUESTION") {
+        const { qNo, text } = action.payLoad
         const newArray = [...state.questions]
-        newArray[action.qId] = action.payLoad
+        newArray[qNo] = text
         return {
             ...state,
             questions: newArray
         }
     }
     else if (action.type === "UPDATE_OPTIONS") {
+        const { qNo, text, opNo } = action.payLoad
         const newArray = [...state.options]
-        newArray[action.qId][action.opId] = action.payLoad
+        newArray[qNo][opNo] = text
         return {
             ...state,
             options: newArray
@@ -60,68 +63,67 @@ function CreateTest() {
     const [state, dispatch] = useReducer(reducer, defaultState);
 
     const handleAddQClick = () => {
-        dispatch({ type: "SET_QUESTION", payLoad: "" })
+        dispatch({ type: "SET_QUESTION", payLoad: { text: "" } })
     }
 
     const handleAddOpClick = (e, qNo) => {
-        e.preventDefault();
-        dispatch({ type: "SET_OPTION", qId: qNo, payLoad: "" })
+        dispatch({ type: "SET_OPTION", payLoad: { qNo, text: "" } })
     }
     const handleQuestionUpdate = (qNo, text) => {
-        dispatch({ type: "UPDATE_QUESTION", qId: qNo, payLoad: text })
+        dispatch({ type: "UPDATE_QUESTION", payLoad: { qNo, text } })
     }
 
     const handleOptionUpdate = (qNo, opNo, text) => {
-        dispatch({ type: "UPDATE_OPTIONS", qId: qNo, opId: opNo, payLoad: text })
+        dispatch({ type: "UPDATE_OPTIONS", payLoad: { text, opNo, qNo } })
+    }
+
+    const handleFormSubmit = (event) => {
+        event.preventDefault();
+        console.log(state);
     }
 
     return (
         <main>
-
             <h2>Create New Form</h2>
-
             <div>
-
-                <form>
-
+                <form onSubmit={handleFormSubmit}>
                     <div className="box">
-
-                        <div className="mb-2">
-
-                            <label htmlFor="testName">Name of the test:</label>
+                        <div className="mb-3">
+                            <label htmlFor="testName"
+                                className="form-label">
+                                Name of the test
+                            </label>
                             <input type="text"
                                 id="testName"
                                 name="testName"
-                                className="ml-2"
+                                className="form-control w-50"
                                 onChange={(e) => dispatch({
                                     type: "TEST_NAME_CHANGE",
                                     payLoad: e.target.value
                                 })}
+                                required
                             />
-
                         </div>
-
-                        <div className="mb-2">
-
-                            <label htmlFor="subject">Subject:</label>
+                        <div className="mb-3">
+                            <label htmlFor="subject"
+                                className="form-label">
+                                Subject
+                            </label>
                             <input type="text"
                                 id="subject"
                                 name="subject"
-                                className="ml-2"
+                                className="form-control w-50"
                                 onChange={(e) => dispatch({
                                     type: "SUBJECT_CHANGE",
                                     payLoad: e.target.value
                                 })}
+                                required
                             />
-
                         </div>
-
                     </div>
-
-                    <div>
-
+                    <div className="mb-3">
                         {state.questions.map((q, index) => {
-                            return <QuestionTemplate key={ index } qNo={index} text={q}
+                            return <QuestionTemplate key={index} qNo={index} text={q}
                                 options={state.options[index]}
                                 handleQuestionUpdate={handleQuestionUpdate}
                                 handleOptionUpdate={handleOptionUpdate}
@@ -130,17 +132,13 @@ function CreateTest() {
                         })}
                         <AiFillPlusCircle className="q-add"
                             onClick={handleAddQClick} />
-
                     </div>
-
-                    <button type="submit" className="btn btn-success mt-4">
+                    <button type="submit"
+                        className="btn btn-success mt-4">
                         Submit
                     </button>
-
                 </form>
-
             </div>
-
         </main>
     )
 }
@@ -150,31 +148,39 @@ const QuestionTemplate = ({ qNo, text, handleQuestionUpdate, options, handleOpti
     return (
         <div className="box">
             <input type="text"
+                className="form-control mb-3 w-75"
                 value={`${text}`}
                 onChange={(e) => handleQuestionUpdate(qNo, e.target.value)}
+                placeholder={`${qNo + 1}. Enter your question here`}
+                required
             />
-            {
-                options.map((op, opId) => {
-                    return <OptionTemplate key={opId} opNo={opId}
-                        text={op}
-                        qNo={qNo}
-                        handleOptionUpdate={handleOptionUpdate} />
-                })
-            }
-            <br />
-            <button className="btn btn-sm btn-primary mt-2"
-                onClick={(e) => { handleAddOpClick(e, qNo) }}>
+            <div className="mb-3">
+                {
+                    options.map((op, opId) => {
+                        return <OptionTemplate key={opId} opNo={opId}
+                            text={op}
+                            qNo={qNo}
+                            handleOptionUpdate={handleOptionUpdate} />
+                    })
+                }
+            </div>
+            <p className={`btn btn-sm btn-primary ${options.length === 6 && "disabled"}`}
+                onClick={(e) => { options.length < 6 && handleAddOpClick(e, qNo) }}>
                 Add an option
-            </button>
+            </p>
         </div>
     )
 }
 
 const OptionTemplate = (({ qNo, opNo, text, handleOptionUpdate }) => {
-    return <div className="mt-3">
-        <input type="radio" disabled />
+    return <div className="mb-3">
+        <input type="radio"
+            disabled />
         <input type="text" value={`${text}`}
             onChange={(e) => handleOptionUpdate(qNo, opNo, e.target.value)}
+            className="form-control form-control-inline ml-2"
+            placeholder={`${opNo + 1}. Option`}
+            required
         />
     </div>
 })
