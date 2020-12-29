@@ -1,5 +1,6 @@
 import React, { useReducer } from 'react';
 import { AiFillPlusCircle } from 'react-icons/ai';
+import { TiDeleteOutline } from "react-icons/ti";
 
 const defaultState = {
     testName: "",
@@ -56,6 +57,18 @@ const reducer = (state, action) => {
             options: newArray
         }
     }
+    else if (action.type === "REMOVE_QUESTION") {
+        const { qNo } = action.payLoad
+        const newQArray = [...state.questions]
+        newQArray.splice(qNo, 1)
+        const newOpArray = [...state.options]
+        newOpArray.splice(qNo, 1)
+        return {
+            ...state,
+            questions: newQArray,
+            options: newOpArray
+        }
+    }
     throw new Error('no matching action type');
 }
 
@@ -77,6 +90,12 @@ function CreateTest() {
         dispatch({ type: "UPDATE_OPTIONS", payLoad: { text, opNo, qNo } })
     }
 
+    const handleRemoveQuestion = (qNo) => {
+        if(state.questions.length > 1){
+            dispatch({ type: "REMOVE_QUESTION", payLoad: { qNo } })
+        }
+    }
+
     const handleFormSubmit = (event) => {
         event.preventDefault();
         console.log(state);
@@ -87,7 +106,7 @@ function CreateTest() {
             <h2>Create New Form</h2>
             <div>
                 <form onSubmit={handleFormSubmit}>
-                    <div className="box">
+                    <div className="box w-50">
                         <div className="mb-3">
                             <label htmlFor="testName"
                                 className="form-label">
@@ -128,9 +147,10 @@ function CreateTest() {
                                 handleQuestionUpdate={handleQuestionUpdate}
                                 handleOptionUpdate={handleOptionUpdate}
                                 handleAddOpClick={handleAddOpClick}
+                                handleRemoveQuestion={handleRemoveQuestion}
                             />
                         })}
-                        <AiFillPlusCircle className="q-add"
+                        <AiFillPlusCircle className="icon"
                             onClick={handleAddQClick} />
                     </div>
                     <button type="submit"
@@ -144,16 +164,21 @@ function CreateTest() {
 }
 
 
-const QuestionTemplate = ({ qNo, text, handleQuestionUpdate, options, handleOptionUpdate, handleAddOpClick }) => {
+const QuestionTemplate = ({ qNo, text, handleQuestionUpdate, options, handleOptionUpdate, handleAddOpClick, handleRemoveQuestion }) => {
     return (
-        <div className="box">
-            <input type="text"
-                className="form-control mb-3 w-75"
-                value={`${text}`}
-                onChange={(e) => handleQuestionUpdate(qNo, e.target.value)}
-                placeholder={`${qNo + 1}. Enter your question here`}
-                required
-            />
+        <div className="box w-75">
+            <div>
+                <input type="text"
+                    className="form-control form-control-inline mb-3 w-75"
+                    value={`${text}`}
+                    onChange={(e) => handleQuestionUpdate(qNo, e.target.value)}
+                    placeholder={`${qNo + 1}. Enter your question here`}
+                    required
+                />
+                <TiDeleteOutline className="icon ml-4"
+                    onClick={() => handleRemoveQuestion(qNo)}
+                />
+            </div>
             <div className="mb-3">
                 {
                     options.map((op, opId) => {
