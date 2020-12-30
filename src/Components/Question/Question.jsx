@@ -1,5 +1,4 @@
 import React from 'react';
-import "./Question.css";
 
 const Question = ({ question, answer, handleOptionSelect }) => {
     const { id, text, options } = question;

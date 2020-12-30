@@ -1,6 +1,8 @@
 import React, { useReducer } from 'react';
 import AddCircleRoundedIcon from '@material-ui/icons/AddCircleRounded';
 import CancelRoundedIcon from '@material-ui/icons/CancelRounded';
+import TextareaAutosize from '@material-ui/core/TextareaAutosize';
+import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
 
 const defaultState = {
     testName: "",
@@ -69,6 +71,17 @@ const reducer = (state, action) => {
             options: newOpArray
         }
     }
+    else if (action.type === "REMOVE_OPTION") {
+        const { qNo, opNo } = action.payLoad
+        const newOpArray = [...state.options]
+        const specificQOp = [...newOpArray[qNo]]
+        specificQOp.splice(opNo, 1)
+        newOpArray[qNo] = specificQOp
+        return {
+            ...state,
+            options: newOpArray
+        }
+    }
     throw new Error('no matching action type');
 }
 
@@ -91,8 +104,14 @@ function CreateTest() {
     }
 
     const handleRemoveQuestion = (qNo) => {
-        if(state.questions.length > 1){
+        if (state.questions.length > 1) {
             dispatch({ type: "REMOVE_QUESTION", payLoad: { qNo } })
+        }
+    }
+
+    const handleRemoveOption = (qNo, opNo) => {
+        if (state.options[qNo].length > 2) {
+            dispatch({ type: "REMOVE_OPTION", payLoad: { qNo, opNo } })
         }
     }
 
@@ -148,6 +167,7 @@ function CreateTest() {
                                 handleOptionUpdate={handleOptionUpdate}
                                 handleAddOpClick={handleAddOpClick}
                                 handleRemoveQuestion={handleRemoveQuestion}
+                                handleRemoveOption={handleRemoveOption}
                             />
                         })}
                         <AddCircleRoundedIcon className="icon"
@@ -164,18 +184,20 @@ function CreateTest() {
 }
 
 
-const QuestionTemplate = ({ qNo, text, handleQuestionUpdate, options, handleOptionUpdate, handleAddOpClick, handleRemoveQuestion }) => {
+const QuestionTemplate = ({ qNo, text, handleQuestionUpdate, options, handleOptionUpdate, handleAddOpClick, handleRemoveQuestion,
+    handleRemoveOption }) => {
     return (
         <div className="box w-75">
-            <div>
-                <input type="text"
-                    className="form-control form-control-inline mb-3 w-75"
+            <div className="row mb-4">
+                <TextareaAutosize
+                    className="form-control col-10 ml-3"
+                    rowsMax={4}
                     value={`${text}`}
                     onChange={(e) => handleQuestionUpdate(qNo, e.target.value)}
                     placeholder={`${qNo + 1}. Enter your question here`}
                     required
                 />
-                <CancelRoundedIcon className="icon ml-4"
+                <CancelRoundedIcon className="icon mt-2 ml-4"
                     onClick={() => handleRemoveQuestion(qNo)}
                 />
             </div>
@@ -185,7 +207,8 @@ const QuestionTemplate = ({ qNo, text, handleQuestionUpdate, options, handleOpti
                         return <OptionTemplate key={opId} opNo={opId}
                             text={op}
                             qNo={qNo}
-                            handleOptionUpdate={handleOptionUpdate} />
+                            handleOptionUpdate={handleOptionUpdate}
+                            handleRemoveOption={handleRemoveOption} />
                     })
                 }
             </div>
@@ -197,7 +220,7 @@ const QuestionTemplate = ({ qNo, text, handleQuestionUpdate, options, handleOpti
     )
 }
 
-const OptionTemplate = (({ qNo, opNo, text, handleOptionUpdate }) => {
+const OptionTemplate = (({ qNo, opNo, text, handleOptionUpdate, handleRemoveOption }) => {
     return <div className="mb-3">
         <input type="radio"
             disabled />
@@ -206,6 +229,9 @@ const OptionTemplate = (({ qNo, opNo, text, handleOptionUpdate }) => {
             className="form-control form-control-inline ml-2"
             placeholder={`${opNo + 1}. Option`}
             required
+        />
+        <RemoveCircleIcon className="icon ml-4"
+            onClick={() => handleRemoveOption(qNo, opNo)}
         />
     </div>
 })

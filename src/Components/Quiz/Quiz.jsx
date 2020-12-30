@@ -3,7 +3,6 @@ import Question from "../Question/Question.jsx";
 import Navigation from "../Navigation/Navigation.jsx";
 import questionnaire from "../../questionnaire";
 import { Row, Col } from "reactstrap";
-import "./Quiz.css";
 
 const Quiz = () => {
     const [index, setIndex] = useState(0);
@@ -37,7 +36,7 @@ const Quiz = () => {
                         onClick={() => handleOptionSelect(questionnaire[index].id, null)}>
                         Clear Selection
                     </button>
-                    <span className="ml">
+                    <span className="ml-max">
                         <button type="button"
                             className="btn btn-light"
                             onClick={() => index - 1 >= 0 && setIndex(index - 1)}>
