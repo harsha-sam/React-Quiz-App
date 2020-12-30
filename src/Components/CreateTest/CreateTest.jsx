@@ -1,6 +1,6 @@
 import React, { useReducer } from 'react';
-import { AiFillPlusCircle } from 'react-icons/ai';
-import { TiDeleteOutline } from "react-icons/ti";
+import AddCircleRoundedIcon from '@material-ui/icons/AddCircleRounded';
+import CancelRoundedIcon from '@material-ui/icons/CancelRounded';
 
 const defaultState = {
     testName: "",
@@ -150,7 +150,7 @@ function CreateTest() {
                                 handleRemoveQuestion={handleRemoveQuestion}
                             />
                         })}
-                        <AiFillPlusCircle className="icon"
+                        <AddCircleRoundedIcon className="icon"
                             onClick={handleAddQClick} />
                     </div>
                     <button type="submit"
@@ -175,7 +175,7 @@ const QuestionTemplate = ({ qNo, text, handleQuestionUpdate, options, handleOpti
                     placeholder={`${qNo + 1}. Enter your question here`}
                     required
                 />
-                <TiDeleteOutline className="icon ml-4"
+                <CancelRoundedIcon className="icon ml-4"
                     onClick={() => handleRemoveQuestion(qNo)}
                 />
             </div>

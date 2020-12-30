@@ -1,6 +1,6 @@
 import React from 'react';
 import './Navigation.css';
-import { AiFillClockCircle } from 'react-icons/ai';
+import TimerRoundedIcon from '@material-ui/icons/TimerRounded';
 
 const Navigation = ({ qSelect, totalQuestions }) => {
     const boxes = [];
@@ -15,7 +15,7 @@ const Navigation = ({ qSelect, totalQuestions }) => {
     }
     return <section>
         <div className="box mb-3 mt-4">
-            <AiFillClockCircle/> 30:00
+            <TimerRoundedIcon/> 30:00
         </div>
         <div className="box mb-4">
             { boxes }
