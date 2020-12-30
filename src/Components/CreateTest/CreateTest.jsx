@@ -1,91 +1,19 @@
 import React, { useReducer } from 'react';
-import AddCircleRoundedIcon from '@material-ui/icons/AddCircleRounded';
-import CancelRoundedIcon from '@material-ui/icons/CancelRounded';
-import TextareaAutosize from '@material-ui/core/TextareaAutosize';
-import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
+import reducer from "./reducer";
+import QuestionTemplate from "./QuestionTemplate";
+import AddCircleRoundedIcon from "@material-ui/icons/AddCircleRounded";
 
 const defaultState = {
     testName: "",
     subject: "",
     questions: [""],
-    options: [["", ""]]
+    options: [["", ""]],
+    answers: [null]
 }
 
-const reducer = (state, action) => {
-    console.log(state);
-    if (action.type === "TEST_NAME_CHANGE") {
-        return {
-            ...state,
-            testName: action.payLoad
-        }
-    }
-    else if (action.type === "SUBJECT_CHANGE") {
-        return {
-            ...state,
-            subject: action.payLoad
-        }
-    }
-    else if (action.type === "SET_QUESTION") {
-        return {
-            ...state,
-            questions: [...state.questions, action.payLoad.text],
-            options: [...state.options, ["", ""]]
-        }
-    }
-    else if (action.type === "SET_OPTION") {
-        const { qNo, text } = action.payLoad
-        const newArray = [...state.options]
-        newArray[qNo] = [...newArray[qNo], text]
-        return {
-            ...state,
-            options: newArray
-        }
-    }
-    else if (action.type === "UPDATE_QUESTION") {
-        const { qNo, text } = action.payLoad
-        const newArray = [...state.questions]
-        newArray[qNo] = text
-        return {
-            ...state,
-            questions: newArray
-        }
-    }
-    else if (action.type === "UPDATE_OPTIONS") {
-        const { qNo, text, opNo } = action.payLoad
-        const newArray = [...state.options]
-        newArray[qNo][opNo] = text
-        return {
-            ...state,
-            options: newArray
-        }
-    }
-    else if (action.type === "REMOVE_QUESTION") {
-        const { qNo } = action.payLoad
-        const newQArray = [...state.questions]
-        newQArray.splice(qNo, 1)
-        const newOpArray = [...state.options]
-        newOpArray.splice(qNo, 1)
-        return {
-            ...state,
-            questions: newQArray,
-            options: newOpArray
-        }
-    }
-    else if (action.type === "REMOVE_OPTION") {
-        const { qNo, opNo } = action.payLoad
-        const newOpArray = [...state.options]
-        const specificQOp = [...newOpArray[qNo]]
-        specificQOp.splice(opNo, 1)
-        newOpArray[qNo] = specificQOp
-        return {
-            ...state,
-            options: newOpArray
-        }
-    }
-    throw new Error('no matching action type');
-}
+export const TestContext = React.createContext();
 
-function CreateTest() {
+const CreateTest = () => {
     const [state, dispatch] = useReducer(reducer, defaultState);
 
     const handleAddQClick = () => {
@@ -115,124 +43,84 @@ function CreateTest() {
         }
     }
 
+    const handleAnswerSelect = (qNo, opNo) => {
+        dispatch({ type: "UPDATE_ANSWER", payLoad: { qNo, opNo } })
+    }
+
     const handleFormSubmit = (event) => {
         event.preventDefault();
-        console.log(state);
+        console.log("submitted");
     }
 
     return (
-        <main>
-            <h2>Create New Form</h2>
-            <div>
-                <form onSubmit={handleFormSubmit}>
-                    <div className="box w-50">
-                        <div className="mb-3">
-                            <label htmlFor="testName"
-                                className="form-label">
-                                Name of the test
-                            </label>
-                            <input type="text"
-                                id="testName"
-                                name="testName"
-                                className="form-control w-50"
-                                onChange={(e) => dispatch({
-                                    type: "TEST_NAME_CHANGE",
-                                    payLoad: e.target.value
-                                })}
-                                required
-                            />
+        <TestContext.Provider value={{
+            handleQuestionUpdate, handleRemoveQuestion,
+            handleAddOpClick, handleOptionUpdate, handleRemoveOption,
+            handleAnswerSelect, answers: state.answers
+        }}>
+            <main>
+                <h2>Create New Form</h2>
+                <div>
+                    <form onSubmit={handleFormSubmit}>
+                        <div className="box w-50">
+                            <div className="mb-3">
+                                <label htmlFor="testName"
+                                    className="form-label">
+                                    Name of the test
+                                </label>
+                                <input type="text"
+                                    id="testName"
+                                    name="testName"
+                                    className="form-control w-50"
+                                    onChange={(e) => dispatch({
+                                        type: "TEST_NAME_CHANGE",
+                                        payLoad: e.target.value
+                                    })}
+                                    required
+                                />
+                            </div>
+                            <div className="mb-3">
+                                <label htmlFor="subject"
+                                    className="form-label">
+                                    Subject
+                                </label>
+                                <input type="text"
+                                    id="subject"
+                                    name="subject"
+                                    className="form-control w-50"
+                                    onChange={(e) => dispatch({
+                                        type: "SUBJECT_CHANGE",
+                                        payLoad: e.target.value
+                                    })}
+                                    required
+                                />
+                            </div>
                         </div>
                         <div className="mb-3">
-                            <label htmlFor="subject"
-                                className="form-label">
-                                Subject
-                            </label>
-                            <input type="text"
-                                id="subject"
-                                name="subject"
-                                className="form-control w-50"
-                                onChange={(e) => dispatch({
-                                    type: "SUBJECT_CHANGE",
-                                    payLoad: e.target.value
-                                })}
-                                required
-                            />
+                            {
+                                state.questions.map((q, index) => {
+                                    return <QuestionTemplate key={index}
+                                        qNo={index}
+                                        text={q}
+                                        options={state.options[index]}
+                                    />
+                                })
+                            }
+                            <span title="Add question">
+                                <AddCircleRoundedIcon className="icon"
+                                    onClick={handleAddQClick}    
+                                />
+                            </span>
                         </div>
-                    </div>
-                    <div className="mb-3">
-                        {state.questions.map((q, index) => {
-                            return <QuestionTemplate key={index} qNo={index} text={q}
-                                options={state.options[index]}
-                                handleQuestionUpdate={handleQuestionUpdate}
-                                handleOptionUpdate={handleOptionUpdate}
-                                handleAddOpClick={handleAddOpClick}
-                                handleRemoveQuestion={handleRemoveQuestion}
-                                handleRemoveOption={handleRemoveOption}
-                            />
-                        })}
-                        <AddCircleRoundedIcon className="icon"
-                            onClick={handleAddQClick} />
-                    </div>
-                    <button type="submit"
-                        className="btn btn-success mt-4">
-                        Submit
-                    </button>
-                </form>
-            </div>
-        </main>
+                        <button type="submit"
+                            className="btn btn-success mt-4">
+                            Submit
+                        </button>
+                    </form>
+                </div>
+            </main>
+        </TestContext.Provider>
     )
 }
 
-
-const QuestionTemplate = ({ qNo, text, handleQuestionUpdate, options, handleOptionUpdate, handleAddOpClick, handleRemoveQuestion,
-    handleRemoveOption }) => {
-    return (
-        <div className="box w-75">
-            <div className="row mb-4">
-                <TextareaAutosize
-                    className="form-control col-10 ml-3"
-                    rowsMax={4}
-                    value={`${text}`}
-                    onChange={(e) => handleQuestionUpdate(qNo, e.target.value)}
-                    placeholder={`${qNo + 1}. Enter your question here`}
-                    required
-                />
-                <CancelRoundedIcon className="icon mt-2 ml-4"
-                    onClick={() => handleRemoveQuestion(qNo)}
-                />
-            </div>
-            <div className="mb-3">
-                {
-                    options.map((op, opId) => {
-                        return <OptionTemplate key={opId} opNo={opId}
-                            text={op}
-                            qNo={qNo}
-                            handleOptionUpdate={handleOptionUpdate}
-                            handleRemoveOption={handleRemoveOption} />
-                    })
-                }
-            </div>
-            <p className={`btn btn-sm btn-primary ${options.length === 6 && "disabled"}`}
-                onClick={(e) => { options.length < 6 && handleAddOpClick(e, qNo) }}>
-                Add an option
-            </p>
-        </div>
-    )
-}
-
-const OptionTemplate = (({ qNo, opNo, text, handleOptionUpdate, handleRemoveOption }) => {
-    return <div className="mb-3">
-        <input type="radio"
-            disabled />
-        <input type="text" value={`${text}`}
-            onChange={(e) => handleOptionUpdate(qNo, opNo, e.target.value)}
-            className="form-control form-control-inline ml-2"
-            placeholder={`${opNo + 1}. Option`}
-            required
-        />
-        <RemoveCircleIcon className="icon ml-4"
-            onClick={() => handleRemoveOption(qNo, opNo)}
-        />
-    </div>
-})
 export default CreateTest
