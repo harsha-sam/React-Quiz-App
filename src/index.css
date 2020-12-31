@@ -13,22 +13,22 @@ body {
     box-shadow: 0 0 30px 5px rgba(0,0,0,.1);
     border-radius: 20px;
 }
-.legend{
-    padding: 3px 0;
-    width: 10px;
-    height: 10px;
-    display: inline-block;
+.ml-max{
+    margin-left: 25%;
 }
 .btn{
     margin: 0 30px 15px 0;
     padding: 3px 18px;
     border-radius: 20px;
 }
+.legend{
+    padding: 3px 0;
+    width: 10px;
+    height: 10px;
+    display: inline-block;
+}
 input[type="radio"]{
     margin-right: 5px;
-}
-.ml-max{
-    margin-left: 25%;
 }
 .icon{
     cursor: pointer;

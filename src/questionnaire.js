@@ -3,10 +3,10 @@ const questionnaire = [
         id: 1,
         text: `What is the output of print str if str = 'Hello World!'?`,
         options: {
-            a: "Hello World!",
-            b: "Error",
-            c: "str",
-            d: "None of the Above"
+            1: "Hello World!",
+            2: "Error",
+            3: "str",
+            4: "None of the Above"
         },
         correctOption: 1
     },
@@ -14,10 +14,10 @@ const questionnaire = [
         id: 2,
         text: `Which of the following function convert a string to an int in python?`,
         options: {
-            a: "int(x, [,base])",
-            b: "long(x, [,base])",
-            c: "float(x)",
-            d: "str(x)"
+            1: "int(x, [,base])",
+            2: "long(x, [,base])",
+            3: "float(x)",
+            4: "str(x)"
         },
         correctOption: 1
     },
@@ -25,10 +25,10 @@ const questionnaire = [
         id: 3,
         text: `Which of the following function merges elements in a sequence?`,
         options: {
-            a: "isupper()",
-            b: "join(seq)",
-            c: "len(string)",
-            d: "ljust(width[, fillchar])"
+            1: "isupper()",
+            2: "join(seq)",
+            3: "len(string)",
+            4: "ljust(width[, fillchar])"
         },
         correctOption: 2
     }

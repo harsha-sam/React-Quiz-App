@@ -27,8 +27,7 @@ const Quiz = () => {
                         answer={answers[questionnaire[index].id]}
                     />
                     <button type="button"
-                        className="btn btn-outline-danger"
-                        onClick={() => handleOptionSelect(questionnaire[index].id, null)}>
+                        className="btn btn-outline-danger">
                         Mark for Review
                     </button>
                     <button type="button"

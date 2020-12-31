@@ -50,6 +50,7 @@ const CreateTest = () => {
     const handleFormSubmit = (event) => {
         event.preventDefault();
         console.log("submitted");
+        console.log(state);
     }
 
     return (
