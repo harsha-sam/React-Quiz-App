@@ -2,13 +2,14 @@ import React from 'react';
 import './Navigation.css';
 import TimerRoundedIcon from '@material-ui/icons/TimerRounded';
 
-const Navigation = ({ qSelect, totalQuestions }) => {
+const Navigation = ({ qSelect, totalQuestions, status }) => {
     const boxes = [];
     for (let i = 1; i <= totalQuestions; i++) {
+        console.log(status);
         boxes.push(
         <button
         key={i}
-        className="qbox"
+        className={`qbox ${status[i]}`}
         onClick={() => qSelect(i - 1)}>
         {i}
         </button>)
@@ -20,7 +21,7 @@ const Navigation = ({ qSelect, totalQuestions }) => {
         <div className="box mb-4">
             { boxes }
             <br />
-            <div className="legend bg-info"></div> Attempted
+            <div className="legend bg-success"></div> Attempted
             <br />
             <div className="legend bg-danger"></div> Flagged
             <br />

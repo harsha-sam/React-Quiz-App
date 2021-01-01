@@ -3,3 +3,9 @@
     border: none;
     border-radius: 20px;
 }
+.flag{
+    background-color: #dc3545;
+}
+.saved{
+    background-color: #28a745;
+}
