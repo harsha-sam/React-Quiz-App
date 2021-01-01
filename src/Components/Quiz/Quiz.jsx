@@ -3,55 +3,86 @@ import Question from "../Question/Question.jsx";
 import Navigation from "../Navigation/Navigation.jsx";
 import questionnaire from "../../questionnaire";
 import { Row, Col } from "reactstrap";
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 
 const defaultStateInit = () => {
     return questionnaire.reduce((acc, q) => {
         const { id } = q;
         acc[id] = null;
-        return acc
-    }, {})
-}
+        return acc;
+    }, {});
+};
 
 const Quiz = () => {
     const [index, setIndex] = useState(0);
     const [answers, setAnswers] = useState(defaultStateInit);
     const [status, setStatus] = useState(defaultStateInit);
-    const handleOptionSelect = (qId, opId) => setAnswers({ ...answers, [qId]: opId });
+    const [modal, setModal] = useState(false);
+    const toggle = () => setModal(!modal);
+    const handleOptionSelect = (qId, opId) =>
+        setAnswers({ ...answers, [qId]: opId });
     const qSelect = (qId) => {
         const currId = questionnaire[index].id;
-        if (answers[currId] && status[currId] !== "flag"){
-            setStatus({ ...status,  [currId]: "saved"});
+        if (answers[currId] && status[currId] !== "flag") {
+            setStatus({ ...status, [currId]: "saved" });
         }
         setIndex(qId);
-    }
+    };
     const handleMarkForReview = (qId) => {
-        if (status[qId] === "flag"){
-            setStatus({...status, [qId]: null});
+        if (status[qId] === "flag") {
+            setStatus({ ...status, [qId]: null });
+        } else {
+            setStatus({ ...status, [qId]: "flag" });
         }
-        else{
-            setStatus({...status, [qId]: 'flag'});
-        }
-    }
+    };
     const handleClearSelection = (qId) => {
-        if (status[qId] === "saved"){
-            setStatus({...status, [qId]: null});
+        if (status[qId] === "saved") {
+            setStatus({ ...status, [qId]: null });
         }
         handleOptionSelect(qId, null);
-    }
+    };
     const handlePrev = () => {
         const qId = questionnaire[index].id;
-        if (answers[qId] && status[qId] !== "flag"){
-            setStatus({ ...status,  [qId]: "saved"});
+        if (answers[qId] && status[qId] !== "flag") {
+            setStatus({ ...status, [qId]: "saved" });
         }
-        setIndex((curr) => curr - 1)
-    }
+        setIndex((curr) => curr - 1);
+    };
     const handleNext = () => {
         const qId = questionnaire[index].id;
-        if (answers[qId] && status[qId] !== "flag"){
-            setStatus({ ...status,  [qId]: "saved"});
+        if (answers[qId] && status[qId] !== "flag") {
+            setStatus({ ...status, [qId]: "saved" });
         }
-        setIndex((curr) => curr + 1)
-    }
+        setIndex((curr) => curr + 1);
+    };
+    const unAttemptedCount = () => {
+        let count = 0;
+        for (let key in answers) {
+            if (!answers[key]) {
+                count++;
+            }
+        }
+        return count;
+    };
+    const attemptedCount = () => {
+        let attempted = 0;
+        for (let key in answers) {
+            if (answers[key]) {
+                attempted++;
+            }
+        }
+        return attempted;
+    };
+    const flaggedCount = () => {
+        let flagged = 0;
+        for (let key in status) {
+            if (status[key] === "flag") {
+                flagged += 1;
+            }
+        }
+        return flagged;
+    };
+    const currQId = questionnaire[index].id;
     return (
         <section>
             <Row>
@@ -60,59 +91,88 @@ const Quiz = () => {
                         className="mb-3"
                         question={questionnaire[index]}
                         handleOptionSelect={handleOptionSelect}
-                        answer={answers[questionnaire[index].id]}
+                        answer={answers[currQId]}
                     />
-                    <button type="button"
+                    <button
+                        type="button"
                         className="btn btn-outline-danger"
-                        onClick={() => handleMarkForReview(questionnaire[index].id)}>
-                        {
-                            status[questionnaire[index].id] === "flag"
-                            ? "Unmark"
-                            : "Mark for Review"
-                        }
+                        onClick={() => handleMarkForReview(currQId)}
+                    >
+                        {status[currQId] === "flag" ? "Unmark" : "Mark for Review"}
                     </button>
-                    <button type="button"
-                        className="btn btn-dark"
-                        onClick={() => handleClearSelection(questionnaire[index].id)}>
-                        Clear Selection
-                    </button>
+                    {answers[currQId] ? (
+                        <button
+                            type="button"
+                            className="btn btn-dark"
+                            onClick={() => handleClearSelection(currQId)}
+                        >
+                            Clear Selection
+                        </button>
+                    ) :
+                        (
+                            <button type="button" className="btn btn-dark" disabled>
+                                Clear Selection
+                            </button>
+                        )}
                     <span className="ml-max">
-                        {
-                            index - 1 < 0 ?
-                            <button type="button"
-                                className="btn btn-light"
-                                disabled>
+                        {index - 1 < 0 ? (
+                            <button type="button" className="btn btn-light" disabled>
                                 Previous
                             </button>
-                            :
-                            <button type="button"
-                                className="btn btn-light"
-                                onClick={handlePrev}>
-                                Previous
-                            </button>
-                        }
-                        {
-                            index + 1 > questionnaire.length - 1?
-                            <button type="button"
-                                className="btn btn-dark"
-                                disabled>
+                        ) : (
+                                <button
+                                    type="button"
+                                    className="btn btn-light"
+                                    onClick={handlePrev}
+                                >
+                                    Previous
+                                </button>
+                            )}
+                        {index + 1 > questionnaire.length - 1 ? (
+                            <button type="button" className="btn btn-dark" disabled>
                                 Next
                             </button>
-                            :
-                            <button type="button"
-                                className="btn btn-dark"
-                                onClick={handleNext}>
-                                Next
-                            </button>
-                        }
+                        ) : (
+                                <button
+                                    type="button"
+                                    className="btn btn-dark"
+                                    onClick={handleNext}
+                                >
+                                    Next
+                                </button>
+                            )}
                     </span>
                 </Col>
                 <Col xs="3">
-                    <Navigation totalQuestions={questionnaire.length} 
-                    qSelect={qSelect} 
-                    status={status} 
+                    <Navigation
+                        totalQuestions={questionnaire.length}
+                        qSelect={qSelect}
+                        status={status}
                     />
+                    <button className="btn btn-success btn-block mt-5" onClick={toggle}>
+                        Submit
+                    </button>
                 </Col>
+                <Modal isOpen={modal} toggle={toggle}>
+                    <ModalHeader>Are you sure?</ModalHeader>
+                    <ModalBody>
+                        <p>
+                            <strong>Attempted</strong>: {attemptedCount()}
+                            <br />
+                            <strong>Not Attempted</strong>: {unAttemptedCount()}
+                            <br />
+                            <strong>Marked for Review</strong>: {flaggedCount()}
+                        </p>
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button color="primary" onClick={toggle}>
+                            Continue
+                        </Button>{" "}
+                        <Button color="secondary" onClick={toggle}>
+                            Cancel
+                        </Button>
+                    </ModalFooter>
+                </Modal>
             </Row>
         </section>
     );

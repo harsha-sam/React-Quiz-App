@@ -109,7 +109,7 @@ const CreateTest = () => {
                             }
                             <span title="Add question">
                                 <AddCircleRoundedIcon className="icon"
-                                    onClick={handleAddQClick}    
+                                    onClick={handleAddQClick}
                                 />
                             </span>
                         </div>

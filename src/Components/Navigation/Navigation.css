@@ -1,11 +1,11 @@
-.qbox{
-    margin: 5px;
-    border: none;
-    border-radius: 20px;
+.qbox {
+  margin: 5px;
+  border: none;
+  border-radius: 20px;
 }
-.flag{
-    background-color: #dc3545;
+.flag {
+  background-color: #dc3545;
 }
-.saved{
-    background-color: #28a745;
+.saved {
+  background-color: #28a745;
 }

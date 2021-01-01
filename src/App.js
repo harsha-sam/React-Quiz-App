@@ -6,9 +6,9 @@ import './App.css';
 function App() {
     return (
         <Container className="my-5">
-            {/* <h2 className="mb-3">Python</h2> */}
+            <h2 className="mb-3">Python</h2>
             <Quiz />
-            <CreateTest />
+            {/* <CreateTest /> */}
         </Container>
     );
 }
