@@ -1,6 +1,15 @@
 const reducer = (state, action) => {
     console.log(state);
-    if (action.type === "TEST_NAME_CHANGE") {
+    if (action.type === "RESET_TO_DEFAULT") {
+        return {
+            testName: "",
+            subject: "",
+            questions: [""],
+            options: [["", ""]],
+            answers: [null]
+        }
+    }
+    else if (action.type === "TEST_NAME_CHANGE") {
         return {
             ...state,
             testName: action.payLoad

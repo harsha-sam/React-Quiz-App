@@ -1,7 +1,10 @@
-import React, { useReducer } from 'react';
+import React, { useState, useReducer } from 'react';
 import reducer from "./reducer";
 import QuestionTemplate from "./QuestionTemplate";
+import { Button, Modal, ModalHeader, ModalFooter } from "reactstrap";
+import { Link } from 'react-router-dom';
 import AddCircleRoundedIcon from "@material-ui/icons/AddCircleRounded";
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 
 const defaultState = {
     testName: "",
@@ -15,6 +18,8 @@ export const TestContext = React.createContext();
 
 const CreateTest = () => {
     const [state, dispatch] = useReducer(reducer, defaultState);
+    const [modal, setModal] = useState(false);
+    const toggle = () => setModal(!modal);
 
     const handleAddQClick = () => {
         dispatch({ type: "SET_QUESTION", payLoad: { text: "" } })
@@ -51,6 +56,20 @@ const CreateTest = () => {
         event.preventDefault();
         console.log("submitted");
         console.log(state);
+        fetch("http://localhost:3000/quiz", {
+            method: 'post',
+            headers:{'Content-Type':'application/json'},
+            body:JSON.stringify(state)
+        })
+        .then((res) => res.json())
+        .then((reply) => {
+            console.log(reply)
+            toggle();
+            dispatch({ type: "RESET_TO_DEFAULT" })
+        })
+        .catch((err) => {
+            console.log("Something went wrong");
+        });
     }
 
     return (
@@ -73,6 +92,7 @@ const CreateTest = () => {
                                     id="testName"
                                     name="testName"
                                     className="form-control w-50"
+                                    value={state.testName}
                                     onChange={(e) => dispatch({
                                         type: "TEST_NAME_CHANGE",
                                         payLoad: e.target.value
@@ -89,6 +109,7 @@ const CreateTest = () => {
                                     id="subject"
                                     name="subject"
                                     className="form-control w-50"
+                                    value={state.subject}
                                     onChange={(e) => dispatch({
                                         type: "SUBJECT_CHANGE",
                                         payLoad: e.target.value
@@ -118,6 +139,19 @@ const CreateTest = () => {
                             Submit
                         </button>
                     </form>
+                    <Modal isOpen={modal} toggle={toggle}>
+                        <ModalHeader><CheckCircleIcon/> Quiz sucessfully created</ModalHeader>
+                        <ModalFooter>
+                            <Button color="light">
+                                <Link onClick={toggle} to={"/quiz"}>
+                                    Head over to quiz
+                                </Link>{" "}
+                            </Button>
+                            <Button color="secondary" onClick={toggle} to={"/"}>
+                                Go Back to Home
+                            </Button>
+                        </ModalFooter>
+                </Modal>
                 </div>
             </main>
         </TestContext.Provider>
