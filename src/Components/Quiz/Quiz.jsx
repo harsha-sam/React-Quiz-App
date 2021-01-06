@@ -15,8 +15,10 @@ const defaultStateInit = (qb) => {
 const Quiz = () => {
     const [index, setIndex] = useState(0);
     const [questionnaire, setQuestionnaire] = useState([]);
-    const [answers, setAnswers] = useState([]);
-    const [status, setStatus] = useState([]);
+    const [answers, setAnswers] = useState({});
+    const [status, setStatus] = useState({});
+    const [showResult, setShowResult] = useState(false);
+    const [result, setResult] = useState(0);
     const [modal, setModal] = useState(false);
 
     useEffect(() => {
@@ -32,6 +34,19 @@ const Quiz = () => {
     }, [])
 
     const toggle = () => setModal(!modal);
+
+    const handleQuizSubmit = () => {
+        let count = 0;
+        for ( let question of questionnaire ){
+            const {id, correctOption} = question;
+            if (correctOption === parseInt(answers[id])){
+                count++;
+            }
+        }
+        setResult(count);
+        setShowResult(true);
+        toggle();
+    }
 
     const handleOptionSelect = (qId, opId) =>
         setAnswers({ ...answers, [qId]: opId });
@@ -108,8 +123,10 @@ const Quiz = () => {
     if (questionnaire.length === 0) {
         return <h2>loading...</h2>
     }
+    else if (showResult){
+        return <h2>Your score is {result}</h2>
+    }
     else{
-        console.log(questionnaire);
         const currQId = questionnaire[index].id;
         return (
             <section>
@@ -193,7 +210,7 @@ const Quiz = () => {
                             </p>
                         </ModalBody>
                         <ModalFooter>
-                            <Button color="primary" onClick={toggle}>
+                            <Button color="primary" onClick={handleQuizSubmit}>
                                 Continue
                             </Button>{" "}
                             <Button color="secondary" onClick={toggle}>

@@ -2,7 +2,6 @@ import { Container } from 'reactstrap';
 import Quiz from "./Components/Quiz/Quiz.jsx";
 import CreateTest from "./Components/CreateTest/CreateTest.jsx";
 import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
-import './App.css';
 
 function App() {
     return (
