@@ -26,7 +26,7 @@ const reducer = (state, action) => {
             ...state,
             questions: [...state.questions, action.payLoad.text],
             options: [...state.options, ["", ""]],
-            answers: [...state.answers, [null]]
+            answers: [...state.answers, null]
         }
     }
     else if (action.type === "SET_OPTION") {
@@ -50,7 +50,9 @@ const reducer = (state, action) => {
     else if (action.type === "UPDATE_OPTIONS") {
         const { qNo, text, opNo } = action.payLoad
         const newArray = [...state.options]
-        newArray[qNo][opNo] = text
+        const qOptions = [...newArray[qNo]]
+        qOptions[opNo] = text
+        newArray[qNo] = qOptions
         return {
             ...state,
             options: newArray
