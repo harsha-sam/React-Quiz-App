@@ -22,9 +22,10 @@ const Quiz = () => {
     const [modal, setModal] = useState(false);
 
     useEffect(() => {
-        fetch("http://localhost:3000/quiz")
+        fetch("http://localhost:3000/quiz/600be64dd329823775771b4c")
             .then((res) => res.json())
             .then((data) => {
+                data = data['questionnaire']
                 setQuestionnaire(() => {
                     setAnswers(defaultStateInit(data));
                     setStatus(defaultStateInit(data));

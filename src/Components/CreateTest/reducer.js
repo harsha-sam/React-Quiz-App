@@ -2,11 +2,16 @@ const reducer = (state, action) => {
     console.log(state);
     if (action.type === "RESET_TO_DEFAULT") {
         return {
+            host:"600be4456fc6443652568a27",
             testName: "",
             subject: "",
             questions: [""],
             options: [["", ""]],
-            answers: [null]
+            answers: [null],
+            year: [],
+            dept: [],
+            section: [],
+            dateAndTime: new Date()
         }
     }
     else if (action.type === "TEST_NAME_CHANGE") {
@@ -19,6 +24,30 @@ const reducer = (state, action) => {
         return {
             ...state,
             subject: action.payLoad
+        }
+    }
+    else if (action.type === "YEAR_CHANGE") {
+        return {
+            ...state,
+            year: action.payLoad
+        }
+    }
+    else if (action.type === "SECTION_CHANGE") {
+        return {
+            ...state,
+            section: action.payLoad
+        }
+    }
+    else if (action.type === "BRANCH_CHANGE") {
+        return {
+            ...state,
+            dept: action.payLoad
+        }
+    }
+    else if (action.type === "DATE_AND_TIME_CHANGE") {
+        return {
+            ...state,
+            dateAndTime: action.payLoad
         }
     }
     else if (action.type === "SET_QUESTION") {

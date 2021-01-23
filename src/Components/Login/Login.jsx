@@ -24,10 +24,10 @@ const Signin = ({handleCurr}) => {
         </p>
         <div className="mt-4 pl">
             <form onSubmit={handleSubmit}>
-                <label htmlFor="email"><strong>Email Address</strong></label>
-                <input type="email"
+                <label htmlFor="uid"><strong>Username</strong></label>
+                <input type="text"
                     className="form-newline" 
-                    id="email" 
+                    id="uid" 
                     required 
                     ref={email}
                     />
@@ -38,11 +38,11 @@ const Signin = ({handleCurr}) => {
                 />
                 <input type="checkbox" id="rememberme"/>
                 <label htmlFor="rememberme" className="ml-1">Remember me</label>
-                <button className="ml btn my-0 mr-0 p-0" 
+                {/* <button className="ml btn my-0 mr-0 p-0" 
                     type="button"
                     onClick={(e) => handleCurr(e, "ForgotPass")}>
                     <strong>Forgot Password</strong>
-                </button>
+                </button> */}
                 <br />
                 <button type="submit" className="btn btn-dark">Login</button>
             </form>

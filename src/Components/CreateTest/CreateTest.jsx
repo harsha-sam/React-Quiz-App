@@ -1,17 +1,24 @@
 import React, { useState, useReducer } from 'react';
 import reducer from "./reducer";
 import QuestionTemplate from "./QuestionTemplate";
+import MultipleSelect from "../MultipleSelect/MultipleSelect";
+import DateAndTimePickers from "../DateAndTimePickers/DateAndTimePickers";
 import { Button, Modal, ModalHeader, ModalFooter } from "reactstrap";
 import { Link } from 'react-router-dom';
 import AddCircleRoundedIcon from "@material-ui/icons/AddCircleRounded";
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 
 const defaultState = {
+    host:"600be4456fc6443652568a27",
     testName: "",
     subject: "",
     questions: [""],
     options: [["", ""]],
-    answers: [null]
+    answers: [null],
+    year: [],
+    dept: [],
+    section: [],
+    dateAndTime: new Date()
 }
 
 export const TestContext = React.createContext();
@@ -19,6 +26,7 @@ export const TestContext = React.createContext();
 const CreateTest = () => {
     const [state, dispatch] = useReducer(reducer, defaultState);
     const [modal, setModal] = useState(false);
+    const [isDateValid, setIsDateValid] = useState(false);
     const toggle = () => setModal(!modal);
 
     const handleAddQClick = () => {
@@ -26,6 +34,7 @@ const CreateTest = () => {
     }
 
     const handleAddOpClick = (e, qNo) => {
+        e.preventDefault();
         dispatch({ type: "SET_OPTION", payLoad: { qNo, text: "" } })
     }
     const handleQuestionUpdate = (qNo, text) => {
@@ -51,25 +60,41 @@ const CreateTest = () => {
     const handleAnswerSelect = (qNo, opNo) => {
         dispatch({ type: "UPDATE_ANSWER", payLoad: { qNo, opNo } })
     }
-
+    const handleYearSelect = (e) => {
+        dispatch({ type: "YEAR_CHANGE", payLoad: e.target.value })
+    }
+    const handleSectionSelect = (e) => {
+        dispatch({ type: "SECTION_CHANGE", payLoad: e.target.value })
+    }
+    const handleBranchSelect = (e) => {
+        dispatch({ type: "BRANCH_CHANGE", payLoad: e.target.value })
+    }
+    const handleDateandTimeChange = (val) => {
+        setIsDateValid(val > new Date());
+        dispatch({ type: "DATE_AND_TIME_CHANGE", payLoad: val })
+    }
     const handleFormSubmit = (event) => {
         event.preventDefault();
-        console.log("submitted");
-        console.log(state);
-        fetch("http://localhost:3000/quiz", {
-            method: 'post',
-            headers:{'Content-Type':'application/json'},
-            body:JSON.stringify(state)
-        })
-        .then((res) => res.json())
-        .then((reply) => {
-            console.log(reply)
-            toggle();
-            dispatch({ type: "RESET_TO_DEFAULT" })
-        })
-        .catch((err) => {
-            console.log("Something went wrong");
-        });
+        console.log("in")
+        console.log(isDateValid)
+        if (isDateValid) {
+            console.log("submitted");
+            console.log(state);
+            fetch("http://localhost:3000/quiz", {
+                method: 'post',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(state)
+            })
+                .then((res) => res.json())
+                .then((reply) => {
+                    console.log(reply)
+                    toggle();
+                    // dispatch({ type: "RESET_TO_DEFAULT" })
+                })
+                .catch((err) => {
+                    console.log("Something went wrong!", err);
+                });
+        }
     }
 
     return (
@@ -78,7 +103,7 @@ const CreateTest = () => {
             handleAddOpClick, handleOptionUpdate, handleRemoveOption,
             handleAnswerSelect, answers: state.answers
         }}>
-            <main>
+            <main className="container-fluid">
                 <h2>Create New Form</h2>
                 <div>
                     <form onSubmit={handleFormSubmit}>
@@ -87,7 +112,7 @@ const CreateTest = () => {
                                 <label htmlFor="testName"
                                     className="form-label">
                                     Name of the test
-                                </label>
+                            </label>
                                 <input type="text"
                                     id="testName"
                                     name="testName"
@@ -104,7 +129,7 @@ const CreateTest = () => {
                                 <label htmlFor="subject"
                                     className="form-label">
                                     Subject
-                                </label>
+                            </label>
                                 <input type="text"
                                     id="subject"
                                     name="subject"
@@ -116,6 +141,15 @@ const CreateTest = () => {
                                     })}
                                     required
                                 />
+                            </div>
+                            <div className="mb-3 display-inline">
+                                <MultipleSelect labelName={"Year"} items={['1', '2', '3', '4']} filterItems={state.year} handleChange={handleYearSelect} />
+                                <MultipleSelect labelName={"Branch"} items={['CSE', 'ECE', 'IT', 'EEE', 'MECH', 'CE']} filterItems={state.dept} handleChange={handleBranchSelect} />
+                                <MultipleSelect labelName={"Section"} items={['A', 'B', 'C']} filterItems={state.section} handleChange={handleSectionSelect} />
+                            </div>
+                            <div className="mb-3">
+                                <DateAndTimePickers handleChange={handleDateandTimeChange} value={state.dateAndTime} />
+                                {!isDateValid && <small className="text-danger">Date and Time should be in future</small>}
                             </div>
                         </div>
                         <div className="mb-3">
@@ -140,18 +174,18 @@ const CreateTest = () => {
                         </button>
                     </form>
                     <Modal isOpen={modal} toggle={toggle}>
-                        <ModalHeader><CheckCircleIcon/> Quiz sucessfully created</ModalHeader>
+                        <ModalHeader><CheckCircleIcon /> Quiz sucessfully created</ModalHeader>
                         <ModalFooter>
                             <Button color="light">
                                 <Link onClick={toggle} to={"/quiz"}>
                                     Head over to quiz
-                                </Link>{" "}
+                            </Link>{" "}
                             </Button>
                             <Button color="secondary" onClick={toggle} to={"/"}>
                                 Go Back to Home
-                            </Button>
+                        </Button>
                         </ModalFooter>
-                </Modal>
+                    </Modal>
                 </div>
             </main>
         </TestContext.Provider>

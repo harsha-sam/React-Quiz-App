@@ -33,7 +33,7 @@ const QuestionTemplate = ({ qNo, text, options }) => {
                     return <OptionTemplate key={opId} opNo={opId} text={op} qNo={qNo} />;
                 })}
             </div>
-            <p
+            <button
                 className={`btn btn-sm btn-primary ${options.length === 6 && "disabled"
                     }`}
                 onClick={(e) => {
@@ -41,7 +41,7 @@ const QuestionTemplate = ({ qNo, text, options }) => {
                 }}
             >
                 Add an option
-            </p>
+            </button>
         </div>
     );
 };
