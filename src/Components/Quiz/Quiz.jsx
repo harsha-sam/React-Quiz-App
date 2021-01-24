@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Question from "../Question/Question.jsx";
-import Navigation from "../Navigation/Navigation.jsx";
+import QuizNavigation from "../QuizNavigation/QuizNavigation.jsx";
 import { Row, Col } from "reactstrap";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 
@@ -22,7 +22,7 @@ const Quiz = () => {
     const [modal, setModal] = useState(false);
 
     useEffect(() => {
-        fetch("http://localhost:3000/quiz/600be64dd329823775771b4c")
+        fetch("http://localhost:3000/quiz/600d469566fc8d316b1cb793")
             .then((res) => res.json())
             .then((data) => {
                 data = data['questionnaire']
@@ -190,7 +190,7 @@ const Quiz = () => {
                         </span>
                     </Col>
                     <Col xs="3">
-                        <Navigation
+                        <QuizNavigation
                             totalQuestions={questionnaire.length}
                             qSelect={qSelect}
                             status={status}

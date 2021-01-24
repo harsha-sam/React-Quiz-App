@@ -6,7 +6,7 @@ import GitHubIcon from '@material-ui/icons/GitHub';
 import LinkedInIcon from '@material-ui/icons/LinkedIn';
 import EmailIcon from '@material-ui/icons/Email';
 
-const Signin = ({handleCurr}) => {
+const Signin = ({handleCurr, handleLogin}) => {
     const email = useRef(null);
     const password = useRef(null);
 
@@ -15,7 +15,20 @@ const Signin = ({handleCurr}) => {
     })
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(email.current.value, password.current.value)
+        const uId = email.current.value;
+        const pass = password.current.value;
+        console.log(JSON.stringify({uId, password: pass}))
+        fetch("http://localhost:3000/signin", {
+            method: "post",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({uId, password: pass}),
+        })
+            .then((res) => res.json())
+            .then((usr) => handleLogin(usr))
+            .catch((err) => {
+                console.log("Error !", err);
+            })
+
     }
     return <section id="Login">
         <h1 className="mb-4 pl-1">We are <strong>ACE</strong></h1>
@@ -119,19 +132,19 @@ const ResetPassword = () => {
     </section>
 }
 
-const Login = () => {
+const Login = ({handleLogin}) => {
     const [curr, setCurr] = useState("Signin");
     const handleCurr = (e, val) => {
         e.preventDefault();
         setCurr(val);
     }
     const map = {
-        "Signin": <Signin handleCurr={handleCurr}/>,
+        "Signin": <Signin handleCurr={handleCurr} handleLogin={handleLogin}/>,
         "ForgotPass": <ForgotPass handleCurr={handleCurr}/>,
         "Verification": <Verification handleCurr={handleCurr}/>,
         "ResetPassword": <ResetPassword handleCurr={handleCurr}/>
     }
-    console.log("render", curr, map[curr])
+    // console.log("render", curr, map[curr])
     return (
         <div className="signin">
             <div className="row">

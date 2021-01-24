@@ -2,7 +2,7 @@ const reducer = (state, action) => {
     console.log(state);
     if (action.type === "RESET_TO_DEFAULT") {
         return {
-            host:"600be4456fc6443652568a27",
+            host: "600be4456fc6443652568a27",
             testName: "",
             subject: "",
             questions: [""],
@@ -14,34 +14,11 @@ const reducer = (state, action) => {
             dateAndTime: new Date()
         }
     }
-    else if (action.type === "TEST_NAME_CHANGE") {
+    else if (action.type === "FIELD_CHANGE") {
+        const { name, val } = action.payLoad;
         return {
             ...state,
-            testName: action.payLoad
-        }
-    }
-    else if (action.type === "SUBJECT_CHANGE") {
-        return {
-            ...state,
-            subject: action.payLoad
-        }
-    }
-    else if (action.type === "YEAR_CHANGE") {
-        return {
-            ...state,
-            year: action.payLoad
-        }
-    }
-    else if (action.type === "SECTION_CHANGE") {
-        return {
-            ...state,
-            section: action.payLoad
-        }
-    }
-    else if (action.type === "BRANCH_CHANGE") {
-        return {
-            ...state,
-            dept: action.payLoad
+            [name]: val
         }
     }
     else if (action.type === "DATE_AND_TIME_CHANGE") {
@@ -53,15 +30,15 @@ const reducer = (state, action) => {
     else if (action.type === "SET_QUESTION") {
         return {
             ...state,
-            questions: [...state.questions, action.payLoad.text],
+            questions: [...state.questions, ""],
             options: [...state.options, ["", ""]],
             answers: [...state.answers, null]
         }
     }
     else if (action.type === "SET_OPTION") {
-        const { qNo, text } = action.payLoad
+        const { qNo } = action.payLoad
         const newArray = [...state.options]
-        newArray[qNo] = [...newArray[qNo], text]
+        newArray[qNo] = [...newArray[qNo], ""]
         return {
             ...state,
             options: newArray
@@ -98,7 +75,7 @@ const reducer = (state, action) => {
         return {
             ...state,
             questions: newQArray,
-            options: newOpArray, 
+            options: newOpArray,
             answers: newAnswers
         }
     }
@@ -108,10 +85,10 @@ const reducer = (state, action) => {
         const specificQOp = [...newOpArray[qNo]]
         const newAnswers = [...state.answers]
         specificQOp.splice(opNo, 1)
-        newOpArray[qNo] = specificQOp
         if (newAnswers[qNo] === opNo) {
             newAnswers[qNo] = null
         }
+        newOpArray[qNo] = specificQOp
         return {
             ...state,
             options: newOpArray,

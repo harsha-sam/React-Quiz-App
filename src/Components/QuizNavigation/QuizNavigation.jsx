@@ -1,8 +1,8 @@
 import React from 'react';
-import './Navigation.css';
+import './QuizNavigation.css';
 import TimerRoundedIcon from '@material-ui/icons/TimerRounded';
 
-const Navigation = ({ qSelect, totalQuestions, status }) => {
+const QuizNavigation = ({ qSelect, totalQuestions, status }) => {
     const boxes = [];
     for (let i = 1; i <= totalQuestions; i++) {
         boxes.push(
@@ -27,4 +27,4 @@ const Navigation = ({ qSelect, totalQuestions, status }) => {
         </div>
     </section>;
 }
-export default Navigation;
+export default QuizNavigation;

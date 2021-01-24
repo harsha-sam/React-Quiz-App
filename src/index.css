@@ -38,6 +38,10 @@ input[type="radio"]{
 }
 .icon{
     cursor: pointer;
+    color: rgb(0,0,0,0.54)
+}
+.icon:hover{
+    color: #1a1c20;
 }
 .form-control-inline{
     display: inline;
@@ -45,4 +49,9 @@ input[type="radio"]{
 }
 .display-inline{
     display: inline-flex;
+}
+.section-icon{
+    margin: 10px;
+    font-size: 22px;
+    color: rgb(0,0,0,0.54)
 }

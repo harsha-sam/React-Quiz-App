@@ -47,10 +47,16 @@ const QuestionTemplate = ({ qNo, text, options }) => {
 };
 
 const OptionTemplate = ({ qNo, opNo, text }) => {
-    const { handleOptionUpdate, handleRemoveOption, answers, handleAnswerSelect } = useContext(TestContext);
+    const {
+        handleOptionUpdate,
+        handleRemoveOption,
+        answers,
+        handleAnswerSelect,
+    } = useContext(TestContext);
     return (
         <div className="mb-3">
-            <input type="radio"
+            <input
+                type="radio"
                 name={qNo}
                 checked={answers[qNo] === opNo && true}
                 onChange={() => handleAnswerSelect(qNo, opNo)}
