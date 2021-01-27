@@ -7,26 +7,36 @@ import LinkedInIcon from '@material-ui/icons/LinkedIn';
 import EmailIcon from '@material-ui/icons/Email';
 
 const Signin = ({handleCurr, handleLogin}) => {
-    const email = useRef(null);
+    const id = useRef(null);
     const password = useRef(null);
+    const [isValidPassword, setIsValidPassword] = useState(true);
 
     useEffect(() => {
-        email.current.focus()
+        id.current.focus()
     })
     const handleSubmit = (e) => {
         e.preventDefault();
-        const uId = email.current.value;
+        const uId = id.current.value;
         const pass = password.current.value;
-        console.log(JSON.stringify({uId, password: pass}))
         fetch("http://localhost:3000/signin", {
             method: "post",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({uId, password: pass}),
         })
-            .then((res) => res.json())
-            .then((usr) => handleLogin(usr))
+            .then((res) => {
+                if (res.status === 200){
+                    return res.json()
+                }
+                else{
+                    setIsValidPassword(false);
+                    throw Error("Either you entered wrong password or something went wrong. Please, try again.")
+                }
+            })
+            .then((usr) =>{ 
+                handleLogin(usr);
+            })
             .catch((err) => {
-                console.log("Error !", err);
+                console.log(err);
             })
 
     }
@@ -36,13 +46,13 @@ const Signin = ({handleCurr, handleLogin}) => {
             Welcome Back, Please login to your account.
         </p>
         <div className="mt-4 pl">
-            <form onSubmit={handleSubmit}>
-                <label htmlFor="uid"><strong>Username</strong></label>
+            <form onSubmit={handleSubmit} autoComplete="off">
+                <label htmlFor="uid"><strong>User Id</strong></label>
                 <input type="text"
                     className="form-newline" 
                     id="uid" 
                     required 
-                    ref={email}
+                    ref={id}
                     />
                 <label htmlFor="password"><strong>Password</strong></label>
                 <input type="password" id="password" required 
@@ -57,7 +67,8 @@ const Signin = ({handleCurr, handleLogin}) => {
                     <strong>Forgot Password</strong>
                 </button> */}
                 <br />
-                <button type="submit" className="btn btn-dark">Login</button>
+                {!isValidPassword && <small className="text-danger">Either you entered wrong password or something went wrong. Please, try again.</small>}
+                <button type="submit" className="btn btn-dark mt-3">Login</button>
             </form>
         </div>
     </section>

@@ -7,6 +7,17 @@ import { Button, Modal, ModalHeader, ModalFooter } from "reactstrap";
 import { Link } from "react-router-dom";
 import AddCircleRoundedIcon from "@material-ui/icons/AddCircleRounded";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
+import {
+    FIELD_CHANGE,
+    SET_QUESTION,
+    UPDATE_QUESTION,
+    SET_OPTION,
+    UPDATE_OPTIONS,
+    REMOVE_QUESTION,
+    REMOVE_OPTION,
+    UPDATE_ANSWER,
+    RESET_TO_DEFAULT
+} from "./action";
 
 const defaultState = {
     testName: "",
@@ -22,7 +33,7 @@ const defaultState = {
 
 export const TestContext = React.createContext();
 
-const CreateTest = ({host}) => {
+const CreateTest = ({ host }) => {
     const [state, dispatch] = useReducer(reducer, defaultState);
     const [modal, setModal] = useState(false);
     const [isDateValid, setIsDateValid] = useState(false);
@@ -30,55 +41,55 @@ const CreateTest = ({host}) => {
 
     const handleFieldChange = (e) => {
         dispatch({
-            type: "FIELD_CHANGE",
+            type: FIELD_CHANGE,
             payLoad: { name: e.target.name, val: e.target.value },
         });
     };
     const handleDateandTimeChange = (val) => {
         setIsDateValid(val > new Date());
-        dispatch({ type: "DATE_AND_TIME_CHANGE", payLoad: val });
+        dispatch({ type: FIELD_CHANGE, payLoad: { name: "dateAndTime", val } });
     };
     const handleAddQClick = () => {
-        dispatch({ type: "SET_QUESTION" });
+        dispatch({ type: SET_QUESTION });
     };
     const handleAddOpClick = (e, qNo) => {
         e.preventDefault();
-        dispatch({ type: "SET_OPTION", payLoad: { qNo } });
+        dispatch({ type: SET_OPTION, payLoad: { qNo } });
     };
     const handleQuestionUpdate = (qNo, text) => {
-        dispatch({ type: "UPDATE_QUESTION", payLoad: { qNo, text } });
+        dispatch({ type: UPDATE_QUESTION, payLoad: { qNo, text } });
     };
     const handleOptionUpdate = (qNo, opNo, text) => {
-        dispatch({ type: "UPDATE_OPTIONS", payLoad: { text, opNo, qNo } });
+        dispatch({ type: UPDATE_OPTIONS, payLoad: { text, opNo, qNo } });
     };
     const handleRemoveQuestion = (qNo) => {
         if (state.questions.length > 1) {
-            dispatch({ type: "REMOVE_QUESTION", payLoad: { qNo } });
+            dispatch({ type: REMOVE_QUESTION, payLoad: { qNo } });
         }
     };
     const handleRemoveOption = (qNo, opNo) => {
         if (state.options[qNo].length > 2) {
-            dispatch({ type: "REMOVE_OPTION", payLoad: { qNo, opNo } });
+            dispatch({ type: REMOVE_OPTION, payLoad: { qNo, opNo } });
         }
     };
     const handleAnswerSelect = (qNo, opNo) => {
-        dispatch({ type: "UPDATE_ANSWER", payLoad: { qNo, opNo } });
+        dispatch({ type: UPDATE_ANSWER, payLoad: { qNo, opNo } });
     };
     const handleFormSubmit = (event) => {
         event.preventDefault();
         if (isDateValid) {
-            console.log("submitted");
-            console.log({...state, host});
             fetch("http://localhost:3000/quiz", {
                 method: "post",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({...state, host}),
+                body: JSON.stringify({ ...state, host }),
             })
                 .then((res) => res.json())
                 .then((reply) => {
                     console.log(reply);
-                    toggle();
-                    // dispatch({ type: "RESET_TO_DEFAULT" })
+                    if(reply){
+                        toggle();
+                        dispatch({ type: RESET_TO_DEFAULT })
+                    }
                 })
                 .catch((err) => {
                     console.log("Something went wrong!", err);
@@ -102,7 +113,7 @@ const CreateTest = ({host}) => {
                 <h2>Create New Quiz</h2>
                 <div>
                     <form onSubmit={handleFormSubmit}>
-                        <div className="box w-50">
+                        <div className="box w-75">
                             <div className="mb-3">
                                 <label htmlFor="testName" className="form-label">
                                     Name of the test

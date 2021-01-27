@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useParams } from 'react-router-dom';
 import Question from "../Question/Question.jsx";
 import QuizNavigation from "../QuizNavigation/QuizNavigation.jsx";
 import { Row, Col } from "reactstrap";
@@ -21,8 +22,9 @@ const Quiz = () => {
     const [result, setResult] = useState(0);
     const [modal, setModal] = useState(false);
 
+    const { id } = useParams();
     useEffect(() => {
-        fetch("http://localhost:3000/quiz/600d469566fc8d316b1cb793")
+        fetch(`http://localhost:3000/quiz/${id}`)
             .then((res) => res.json())
             .then((data) => {
                 data = data['questionnaire']
@@ -32,7 +34,7 @@ const Quiz = () => {
                     return data;
                 })
             })
-    }, [])
+    }, [id])
 
     const toggle = () => setModal(!modal);
 
@@ -122,15 +124,15 @@ const Quiz = () => {
     };
 
     if (questionnaire.length === 0) {
-        return <h2>loading...</h2>
+        return <h2 className="text-center">loading...</h2>
     }
     else if (showResult){
-        return <h2>Your score is {result}</h2>
+        return <h2 className="text-center">Your score is {result}</h2>
     }
     else{
         const currQId = questionnaire[index].id;
         return (
-            <section>
+            <section className="m-5">
                 <Row>
                     <Col xs="9">
                         <Question
