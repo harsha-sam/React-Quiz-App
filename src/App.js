@@ -50,7 +50,13 @@ const App = () => {
                 <ListItem button>
                     <IoIosRocket className="section-icon" />
                     <ListItemText primary='Create'/>
-            </ListItem>
+                </ListItem>
+            </Link>,
+            <Link to='/tests'>
+                <ListItem button>
+                    <IoIosRocket className="section-icon" />
+                    <ListItemText primary='Tests'/>
+                </ListItem>
             </Link>,
             <Link to='/analysis'>
                 <ListItem button>
@@ -93,7 +99,7 @@ const App = () => {
                 <FaDumbbell className="section-icon" />
                 <ListItemText primary="Assessments"/>
             </ListItem>
-        </Link>,
+        </Link>
     ]
     return (
         <Router>

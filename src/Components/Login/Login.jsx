@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import "./Login.css";
-import enigma from "./images/enigma.png";
-import welcome from "./images/welcome.gif";
+import enigma from "../../assets/images/enigma.png";
+import welcome from "../../assets/images/welcome.gif";
 import GitHubIcon from '@material-ui/icons/GitHub';
 import LinkedInIcon from '@material-ui/icons/LinkedIn';
 import EmailIcon from '@material-ui/icons/Email';
@@ -29,7 +29,7 @@ const Signin = ({handleCurr, handleLogin}) => {
                 }
                 else{
                     setIsValidPassword(false);
-                    throw Error("Either you entered wrong password or something went wrong. Please, try again.")
+                    throw Error("Either you entered wrong credentials or something went wrong. Please, try again.")
                 }
             })
             .then((usr) =>{ 
@@ -67,7 +67,7 @@ const Signin = ({handleCurr, handleLogin}) => {
                     <strong>Forgot Password</strong>
                 </button> */}
                 <br />
-                {!isValidPassword && <small className="text-danger">Either you entered wrong password or something went wrong. Please, try again.</small>}
+                {!isValidPassword && <small className="text-danger">Either you entered wrong credentials or something went wrong. Please, try again.</small>}
                 <button type="submit" className="btn btn-dark mt-3">Login</button>
             </form>
         </div>

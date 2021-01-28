@@ -4,7 +4,7 @@ import AdapterDateFns from '@material-ui/lab/AdapterDateFns';
 import DateTimePicker from '@material-ui/lab/DateTimePicker';
 import LocalizationProvider from '@material-ui/lab/LocalizationProvider';
 
-export default function DateTimeValidation({ handleChange, value }) {
+export default function DateTimeValidation({ handleChange, value, label }) {
     const [time, setTime] = React.useState(new Date());
 
     React.useEffect(() => {
@@ -22,7 +22,7 @@ export default function DateTimeValidation({ handleChange, value }) {
                     renderInput={(params) => (
                         <TextField {...params} margin="normal" variant="standard" />
                     )}
-                    label="Pick date and time"
+                    label={label}
                     value={value}
                     onChange={handleChange}
                     minDateTime={time}

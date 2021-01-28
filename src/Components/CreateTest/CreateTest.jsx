@@ -28,7 +28,8 @@ const defaultState = {
     year: [],
     dept: [],
     section: [],
-    dateAndTime: new Date(),
+    startDateAndTime: new Date(),
+    endDateAndTime: new Date(),
 };
 
 export const TestContext = React.createContext();
@@ -45,9 +46,13 @@ const CreateTest = ({ host }) => {
             payLoad: { name: e.target.name, val: e.target.value },
         });
     };
-    const handleDateandTimeChange = (val) => {
-        setIsDateValid(val > new Date());
-        dispatch({ type: FIELD_CHANGE, payLoad: { name: "dateAndTime", val } });
+    const handleStartDateandTimeChange = (val) => {
+        setIsDateValid((val > new Date() && state.endDateAndTime > val));
+        dispatch({ type: FIELD_CHANGE, payLoad: { name: "startDateAndTime", val } });
+    };
+    const handleEndDateandTimeChange = (val) => {
+        setIsDateValid((val > state.startDateAndTime && state.startDateAndTime > new Date()));
+        dispatch({ type: FIELD_CHANGE, payLoad: { name: "endDateAndTime", val } });
     };
     const handleAddQClick = () => {
         dispatch({ type: SET_QUESTION });
@@ -112,7 +117,7 @@ const CreateTest = ({ host }) => {
             <main className="container-fluid">
                 <h2>Create New Quiz</h2>
                 <div>
-                    <form onSubmit={handleFormSubmit}>
+                    <form onSubmit={handleFormSubmit} autoComplete="off">
                         <div className="box w-75">
                             <div className="mb-3">
                                 <label htmlFor="testName" className="form-label">
@@ -162,17 +167,25 @@ const CreateTest = ({ host }) => {
                                     handleChange={handleFieldChange}
                                 />
                             </div>
-                            <div className="mb-3">
+                            <div className="mb-2 display-inline">
                                 <DateAndTimePickers
-                                    handleChange={handleDateandTimeChange}
-                                    value={state.dateAndTime}
+                                    handleChange={handleStartDateandTimeChange}
+                                    label={"Pick Start Date and Time"}
+                                    value={state.startDateAndTime}
                                 />
-                                {!isDateValid && (
-                                    <small className="text-danger">
-                                        Date and Time should be in future
-                                    </small>
-                                )}
+                                <DateAndTimePickers
+                                    handleChange={handleEndDateandTimeChange}
+                                    label={"Pick End Date and Time"}
+                                    value={state.endDateAndTime}
+                                />
                             </div>
+                            <br />
+                            {!isDateValid && (
+                                <small className="text-danger">
+                                    Date and Time should be in future and 
+                                    End Date and Time must come after the Start Date and Time
+                                </small>
+                            )}
                         </div>
                         <div className="mb-3">
                             {state.questions.map((q, index) => {
