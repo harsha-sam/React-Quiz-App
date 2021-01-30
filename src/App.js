@@ -109,7 +109,7 @@ const App = () => {
                         sectionFooter={sectionFooter}
                         ChildComponent={<Welcome name={user.name} role={user.role} />} />
                 </Route>
-                <Route exact path="/quiz/:id" children={<Quiz/>} />
+                <Route exact path="/quiz/:id" children={<Quiz sId ={user._id}/>} />
                 <Route exact path="/assessments">
                     <Assessments {...user}/>
                 </Route>

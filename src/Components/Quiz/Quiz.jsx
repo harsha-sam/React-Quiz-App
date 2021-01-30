@@ -13,7 +13,7 @@ const defaultStateInit = (qb) => {
     }, {});
 };
 
-const Quiz = () => {
+const Quiz = ({ sId }) => {
     const [index, setIndex] = useState(0);
     const [questionnaire, setQuestionnaire] = useState([]);
     const [answers, setAnswers] = useState({});
@@ -27,12 +27,16 @@ const Quiz = () => {
         fetch(`http://localhost:3000/quiz/${id}`)
             .then((res) => res.json())
             .then((data) => {
-                data = data['questionnaire']
-                setQuestionnaire(() => {
-                    setAnswers(defaultStateInit(data));
-                    setStatus(defaultStateInit(data));
-                    return data;
-                })
+                if (data === "Already test has been completed"){
+                    console.log('test has been completed')
+                }
+                else{
+                    setQuestionnaire(() => {
+                        setAnswers(defaultStateInit(data));
+                        setStatus(defaultStateInit(data));
+                        return data;
+                    })
+                }
             })
     }, [id])
 
@@ -47,8 +51,21 @@ const Quiz = () => {
             }
         }
         setResult(count);
-        setShowResult(true);
-        toggle();
+        fetch(`http://localhost:3000/response`, {
+                method: "post",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({sId, tId: id, choices: answers, securedScore: count})
+            })
+            .then((res) => res.json())
+            .then((res) => {
+                if(res === "Successfully posted !"){
+                    setShowResult(true);
+                    toggle();
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            })
     }
 
     const handleOptionSelect = (qId, opId) =>
