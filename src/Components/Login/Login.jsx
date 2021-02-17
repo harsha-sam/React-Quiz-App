@@ -18,7 +18,7 @@ const Signin = ({handleCurr, handleLogin}) => {
         e.preventDefault();
         const uId = id.current.value;
         const pass = password.current.value;
-        fetch("http://localhost:3000/signin", {
+        fetch("https://react-assessments.azurewebsites.net/signin", {
             method: "post",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({uId, password: pass}),

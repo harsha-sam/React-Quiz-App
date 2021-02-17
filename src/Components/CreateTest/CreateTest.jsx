@@ -171,12 +171,12 @@ const CreateTest = ({ host }) => {
                                 <DateAndTimePickers
                                     handleChange={handleStartDateandTimeChange}
                                     label={"Pick Start Date and Time"}
-                                    value={state.startDateAndTime}
+                                    value={new Date()}
                                 />
                                 <DateAndTimePickers
                                     handleChange={handleEndDateandTimeChange}
                                     label={"Pick End Date and Time"}
-                                    value={state.endDateAndTime}
+                                    value={new Date()}
                                 />
                             </div>
                             <br />
