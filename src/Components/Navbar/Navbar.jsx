@@ -11,6 +11,7 @@ import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
+import { Link } from "react-router-dom";
 
 const drawerWidth = 250;
 
@@ -110,7 +111,9 @@ export default function PersistentDrawerLeft({
                     >
                         <MenuIcon />
                     </IconButton>
-                    <img src="https://img.icons8.com/dusk/60/000000/graph.png" alt="logo" />
+                    <Link to="/">
+                        <img src="https://img.icons8.com/dusk/60/000000/graph.png" alt="logo" />
+                    </Link> 
                 </Toolbar>
             </AppBar>
             <Drawer

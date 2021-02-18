@@ -9,6 +9,8 @@ import { FaDumbbell } from 'react-icons/fa';
 import { IoIosRocket } from 'react-icons/io';
 import { RiUserSettingsFill } from "react-icons/ri";
 import { FiLogOut } from "react-icons/fi";
+import { BsGraphUp } from "react-icons/bs";
+import { IoCreate } from "react-icons/io5";
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Assessments from './Components/Assessments/Assessments.jsx';
@@ -48,19 +50,13 @@ const App = () => {
         const sectionHeader = [
             <Link to='/create'>
                 <ListItem button>
-                    <IoIosRocket className="section-icon" />
+                    <IoCreate className="section-icon" />
                     <ListItemText primary='Create'/>
-                </ListItem>
-            </Link>,
-            <Link to='/tests'>
-                <ListItem button>
-                    <IoIosRocket className="section-icon" />
-                    <ListItemText primary='Tests'/>
                 </ListItem>
             </Link>,
             <Link to='/analysis'>
                 <ListItem button>
-                    <FaDumbbell className="section-icon" />
+                    <BsGraphUp className="section-icon"/>
                     <ListItemText primary='Analysis'/>
                 </ListItem>
             </Link>
@@ -81,7 +77,7 @@ const App = () => {
                             ChildComponent={<CreateTest host={user._id} />} />
                     </Route>
                     <Route path="*">
-                        <h2>This page doesn't exist or you can't access this page<Link to="/">Home</Link></h2>
+                        <h2>This page doesn't exist or you can't access this page, go back to <Link to="/">Home</Link></h2>
                     </Route>
                 </Switch>
             </Router>

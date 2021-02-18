@@ -28,8 +28,8 @@ function Welcome({name, role}) {
                         <Link to="/assessments" className="mr-3 btn btn-outline-danger">
                             Take an assessment
                         </Link>
-                        <Link to="/analysis" className="btn btn-dark">
-                            Analysis
+                        <Link to="/progress" className="btn btn-dark">
+                            Check Progress
                         </Link>
                     </div>
                 }
