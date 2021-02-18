@@ -5,7 +5,7 @@ const Assessments = ({ year, dept, section }) => {
     const [tests, setTests] = useState([])
     useEffect(() => {
         const fetchTests = setTimeout(() => {
-            fetch("http://localhost:3000/assessments", {
+            fetch("https://react-assessments.azurewebsites.net/assessments", {
                 method: "post",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ year, dept, section })
@@ -17,7 +17,7 @@ const Assessments = ({ year, dept, section }) => {
     })
     useEffect(() => {
         const fetchTests = setTimeout(() => {
-            fetch("http://localhost:3000/assessments", {
+            fetch("https://react-assessments.azurewebsites.net/assessments", {
                 method: "post",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ year, dept, section })
@@ -29,21 +29,27 @@ const Assessments = ({ year, dept, section }) => {
     }, [year, dept, section])
 
     if (tests.length === 0) {
-        return <h1 className="text-center">No tests available.</h1>
+        return <section>
+            <h2 className="text-center">No tests available at this moment.</h2>
+        </section>
     }
     return (
-        <section>
-            {
-                tests.map((test) => {
-                    return <div key={test._id}>
-                        <h3>{test.name}</h3>
-                        <h5>{test.subject}</h5>
-                        <Link className="btn" to={`/quiz/${test._id}`}>
-                            Take test
-                        </Link>
-                    </div>
-                })
-            }
+        <section className="container-fluid">
+            <div className="card-container">
+                {
+                    tests.map((test) => {
+                        return <div className="card box mr-3" style={{width: "18rem"}} key={test._id}>
+                            <div className="card-body">
+                                <h5 className="card-title">{test.name}</h5>
+                                <h6 className="card-text">{test.subject}</h6>
+                                <Link className="btn btn-primary" to={`/quiz/${test._id}`}>
+                                    Take test
+                                </Link>
+                            </div>
+                        </div>
+                    })
+                }
+            </div>
         </section>
     )
 

@@ -83,7 +83,7 @@ const CreateTest = ({ host }) => {
     const handleFormSubmit = (event) => {
         event.preventDefault();
         if (isDateValid) {
-            fetch("http://localhost:3000/quiz", {
+            fetch("https://react-assessments.azurewebsites.net/quiz", {
                 method: "post",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ ...state, host }),
@@ -171,12 +171,12 @@ const CreateTest = ({ host }) => {
                                 <DateAndTimePickers
                                     handleChange={handleStartDateandTimeChange}
                                     label={"Pick Start Date and Time"}
-                                    value={new Date()}
+                                    value={state.startDateAndTime}
                                 />
                                 <DateAndTimePickers
                                     handleChange={handleEndDateandTimeChange}
                                     label={"Pick End Date and Time"}
-                                    value={new Date()}
+                                    value={state.endDateAndTime}
                                 />
                             </div>
                             <br />

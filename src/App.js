@@ -111,7 +111,9 @@ const App = () => {
                 </Route>
                 <Route exact path="/quiz/:id" children={<Quiz sId ={user._id}/>} />
                 <Route exact path="/assessments">
-                    <Assessments {...user}/>
+                    <Navbar sectionHeader={sectionHeader}
+                            sectionFooter={sectionFooter}
+                            ChildComponent={<Assessments {...user}/>} />
                 </Route>
                 <Route path="*">
                     <h2>This page doesn't exist or you can't access this page, go back to <Link to="/">Home</Link></h2>

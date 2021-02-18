@@ -24,7 +24,7 @@ const Quiz = ({ sId }) => {
 
     const { id } = useParams();
     useEffect(() => {
-        fetch(`http://localhost:3000/quiz/${id}`)
+        fetch(`https://react-assessments.azurewebsites.net/quiz/${id}`)
             .then((res) => res.json())
             .then((data) => {
                 if (data === "Already test has been completed"){
@@ -51,7 +51,7 @@ const Quiz = ({ sId }) => {
             }
         }
         setResult(count);
-        fetch(`http://localhost:3000/response`, {
+        fetch(`https://react-assessments.azurewebsites.net/response`, {
                 method: "post",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({sId, tId: id, choices: answers, securedScore: count})

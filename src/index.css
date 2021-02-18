@@ -68,3 +68,9 @@ input[type="radio"]{
 a{
     color: #1a1a1a;
 }
+.card-container{
+    display: flex;
+    justify-content: space-around;
+    flex-flow: row wrap;
+    align-content: space-around;
+}

@@ -179,9 +179,11 @@ const Register = ({ handleCurr }) => {
                     })
                     .then((msg) => {
                         console.log(msg);
+                        setIsLoading(false)
                     })
                     .catch((err) => {
                         console.log(err);
+                        setIsLoading(false)
                     })
             }
         }
